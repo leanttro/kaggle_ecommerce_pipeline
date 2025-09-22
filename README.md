@@ -52,7 +52,7 @@ O projeto está sendo desenvolvido em duas fases principais de arquitetura:
 
 2.  **Clone este repositório:**
     ```bash
-    git clone [URL_DO_SEU_REPOSITORIO]
+    git clone [[URL_DO_SEU_REPOSITORIO](https://github.com/leanttro/kaggle_ecommerce_pipeline.git)]
     ```
 
 3.  **Instale as dependências:**
