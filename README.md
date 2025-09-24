@@ -1,80 +1,73 @@
-# Projeto de Análise de E-commerce | Olist Dataset
+# Projeto de Business Intelligence e Engenharia de Dados | E-commerce Olist
 
-## Status do Projeto: Em Desenvolvimento
+## Status do Projeto: Fase 2 Concluída ✅
 
-Este projeto está atualmente na sua primeira versão, com um pipeline de dados totalmente funcional em ambiente local. A próxima fase, que está em planejamento e desenvolvimento, é a migração completa da solução para um ambiente de nuvem (Google Cloud Platform).
+Este projeto demonstra a construção de uma solução de dados ponta a ponta, desde a ingestão e processamento local até a migração e análise em um ambiente de nuvem robusto e escalável. A **Fase 1 (Arquitetura Local)** e a **Fase 2 (Migração para Nuvem e Dashboard de Logística)** estão concluídas. A próxima etapa será o desenvolvimento do dashboard Financeiro.
 
 ## Visão Geral do Projeto
 
-Este projeto apresenta uma solução de Business Intelligence e Data Engineering para análise de dados do dataset Olist. O objetivo é transformar dados brutos de e-commerce em insights acionáveis, através da construção de um pipeline de dados ponta a ponta, desde a ingestão até a visualização.
+Este projeto apresenta uma solução completa de BI e Engenharia de Dados para análise do dataset Olist. O objetivo é transformar dados brutos de e-commerce em insights acionáveis, cobrindo diferentes áreas de negócio e evoluindo de uma arquitetura local para uma solução *serverless* na Google Cloud Platform (GCP).
 
 ## Problema de Negócio
 
-O principal desafio é responder a perguntas de negócio cruciais para diferentes áreas da empresa, como Vendas, Logística, Marketing e Gestão de Vendedores, permitindo uma tomada de decisão orientada por dados.
+O principal desafio é responder a perguntas de negócio cruciais para diferentes áreas da empresa — como Marketing, Logística e Finanças — permitindo uma tomada de decisão ágil e orientada por dados.
 
 ## Arquitetura da Solução
 
-O projeto está sendo desenvolvido em duas fases principais de arquitetura:
-
 ### Fase 1: Arquitetura Local (Implementada)
-- **Fluxo:** `Arquivos CSV` -> `Jupyter/Python (ETL)` -> `MySQL (Silver/Gold)` -> `Power BI (Visualização)`
-- **Descrição:** Um pipeline de dados local que processa os arquivos CSV, aplica transformações e os armazena em um banco de dados MySQL. O Power BI se conecta a este banco para criar os relatórios.
+- **Fluxo:** `Arquivos CSV` -> `Jupyter/Python (ETL)` -> `MySQL (Camadas Silver/Gold)` -> `Power BI (Visualização)`
+- **Descrição:** Um pipeline de dados inicial que processa os arquivos CSV, aplica transformações e os armazena em um banco de dados MySQL.
 
-### Fase 2: Arquitetura em Nuvem (Próxima Etapa)
-- **Fluxo Planejado:** `GCS (Bronze)` -> `Cloud Functions/Jupyter (ETL)` -> `BigQuery (Silver/Gold)` -> `Power BI (Visualização)`
-- **Descrição:** Evolução da solução para uma arquitetura serverless e escalável na GCP. Os dados brutos serão armazenados no Cloud Storage, processados e carregados no BigQuery, que servirá como Data Warehouse para a análise no Power BI.
+### Fase 2: Arquitetura em Nuvem (Implementada)
+- **Fluxo:** `Python Script (ETL)` -> `GCS (Landing Zone)` -> `BigQuery (Data Warehouse com camadas Silver/Gold)` -> `Power BI (Visualização)`
+- **Descrição:** Evolução da solução para uma arquitetura *serverless* e escalável na GCP. Scripts em Python migraram os dados para o Google Cloud Storage (GCS). De lá, foram carregados no BigQuery, que atua como Data Warehouse central. Para otimizar as consultas, foram criadas *views materializadas* na camada Gold.
 
 ## Tecnologias Utilizadas
 
 - **Linguagem:** Python 3
-- **Bibliotecas de ETL:** Pandas, SQLAlchemy, pandas-gbq (será utilizado na Fase 2)
-- **Banco de Dados:** MySQL (Fase 1)
-- **Cloud & Data Warehouse:** Google Cloud Platform, Google Cloud Storage, Google BigQuery (Fase 2)
+- **Bibliotecas de ETL:** Pandas, SQLAlchemy, pandas-gbq
+- **Banco de Dados (Fase 1):** MySQL
+- **Cloud & Data Warehouse (Fase 2):** Google Cloud Platform (GCP), Google Cloud Storage (GCS), Google BigQuery
 - **Business Intelligence:** Microsoft Power BI
 
-## Estrutura do Repositório
+## Dashboards Desenvolvidos
 
-```
-.
-├── dados/                       # Pasta com os datasets .csv originais da Olist
-├── kaggle_ecommerce.ipynb       # Jupyter Notebook com o processo de ETL local
-├── kaggle_olist.pbix            # Arquivo do Power BI com os dashboards
-├── visualizacoes_kaggle_gold.sql # Scripts SQL para criar as views da camada Gold
-└── README.md                    # Documentação do projeto
-```
-*(Nota: Novos scripts, como o de migração para a nuvem, serão adicionados conforme o projeto avança).*
+### 1. Dashboard de Marketing
+- Focado em analisar a performance de vendas, canais de aquisição e perfil de clientes.
 
-## Como Executar a Fase Atual (Local)
+### 2. Dashboard de Logística 📊
+- Projetado para transformar dados brutos de entrega em insights para otimizar a operação. Responde a perguntas de negócio como:
+    - *"Onde estão nossos gargalos de entrega?"*
+    - *"Nossas entregas são eficientes em relação ao SLA?"*
+    - *"O custo do frete se justifica pela velocidade?"*
+- **KPIs e Análises Principais:**
+    - **Monitoramento de SLA:** Entregas no prazo vs. Atrasadas.
+    - **Análise de Gargalos:** Decompõe o tempo de entrega em fases (aprovação, preparo, transporte) para identificar a maior demora por estado (UF).
+    - **Custo vs. Tempo:** Gráfico de dispersão que analisa a correlação entre o valor do frete e a velocidade da entrega.
+    - **Performance Temporal:** Evolução da eficiência logística ao longo dos anos.
 
-1.  **Pré-requisitos:**
-    - Python 3.x e MySQL Server instalados.
-    - Power BI Desktop instalado.
+## Como Executar
 
-2.  **Clone este repositório:**
-    ```bash
-    git clone [[URL_DO_SEU_REPOSITORIO](https://github.com/leanttro/kaggle_ecommerce_pipeline.git)]
-    ```
+### Versão 2 (Nuvem - GCP)
+A execução deste pipeline ocorre em ambiente de nuvem. Os principais passos são:
+1.  **Ingestão:** Os dados tratados são enviados para um bucket no Google Cloud Storage.
+2.  **Data Warehouse:** O BigQuery é populado com os dados do GCS, onde as tabelas das camadas Silver e Gold são criadas.
+3.  **Visualização:** O Power BI se conecta diretamente ao BigQuery para consumir os dados e alimentar os dashboards de Marketing e Logística.
 
-3.  **Instale as dependências:**
-    ```bash
-    pip install pandas sqlalchemy mysql-connector-python
-    ```
-
-4.  **Execução do Pipeline:**
-    - Configure suas credenciais do banco de dados MySQL no notebook `kaggle_ecommerce.ipynb`.
-    - Execute o notebook para processar os dados e popular as tabelas no seu banco local.
-
-5.  **Visualização:**
-    - Abra o arquivo `kaggle_olist.pbix` no Power BI.
-    - Conecte o dashboard ao seu banco de dados MySQL local.
+### Versão 1 (Local)
+1.  **Pré-requisitos:** Python 3.x, MySQL Server e Power BI Desktop instalados.
+2.  **Clone o repositório:** `git clone https://github.com/leanttro/kaggle_ecommerce_pipeline.git`
+3.  **Instale as dependências:** `pip install pandas sqlalchemy mysql-connector-python`
+4.  **Execute o ETL:** Configure suas credenciais do MySQL no notebook e execute-o para popular o banco de dados local.
+5.  **Visualize:** Abra o arquivo `.pbix` e conecte o dashboard ao seu banco de dados MySQL.
 
 ## Próximos Passos
 
-- [ ] Finalizar o script de migração de dados do MySQL para o Google BigQuery.
-- [ ] Refatorar o pipeline de ETL para operar em um ambiente de nuvem (GCP).
-- [ ] Documentar o processo de implantação e a nova arquitetura em nuvem.
+- [ ] **Fase 3 [FINANCEIRO]:** Desenvolvimento de um novo dashboard focado em análise financeira, respondendo perguntas sobre receita, ticket médio, custos de frete e comissão.
+- [ ] Construir o pipeline de dados para a camada financeira no BigQuery.
+- [ ] Documentar a modelagem e as regras de negócio da área Financeira.
 
 ## Autor
 
 **Leandro Andrade de Oliveira**
-- LinkedIn: [[seu-linkedin](https://www.linkedin.com/in/leanttro/)]
+- **LinkedIn:** [linkedin.com/in/leanttro/](https://www.linkedin.com/in/leanttro/)
